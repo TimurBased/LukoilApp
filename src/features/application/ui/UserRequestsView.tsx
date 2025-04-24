@@ -9,42 +9,23 @@ import {
 	Button,
 	Text,
 } from 'react-native-paper'
-
-interface IAuthor {
-	firstName: string
-	middleName: string
-	lastName: string
-	phone: string
-}
-interface IState {
-	id: string
-	name: string
-}
-interface RequestProps {
-	id: string
-	title: string
-	created: string
-	author: IAuthor
-	state: IState
-}
+import { IRequests } from '../../../entities/IRequests'
 
 interface Props {
-	data: RequestProps[]
+	data: IRequests[]
 }
 
-const MyApplicationsView: React.FC<Props> = ({ data }) => {
+const UserRequestsView: React.FC<Props> = ({ data }) => {
 	const [searchQuery, setSearchQuery] = useState('')
-	const [selectedRequest, setSelectedRequest] = useState<RequestProps | null>(
-		null
-	)
+	const [selectedRequest, setSelectedRequest] = useState<IRequests | null>(null)
 
 	const filteredData = data.filter(
 		item =>
-			item.author.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-			item.author.phone.toLowerCase().includes(searchQuery.toLowerCase())
+			item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			item.state.name.toLowerCase().includes(searchQuery.toLowerCase())
 	)
 
-	const openModal = (request: RequestProps) => {
+	const openModal = (request: IRequests) => {
 		setSelectedRequest(request)
 	}
 
@@ -63,16 +44,14 @@ const MyApplicationsView: React.FC<Props> = ({ data }) => {
 			<DataTable style={styles.dataTable}>
 				<DataTable.Header>
 					<DataTable.Title>Название</DataTable.Title>
-					<DataTable.Title>Автор</DataTable.Title>
+					<DataTable.Title>Состояние</DataTable.Title>
 					<DataTable.Title>Дата создания</DataTable.Title>
 				</DataTable.Header>
 
 				{filteredData.map(item => (
 					<DataTable.Row key={item.id} onPress={() => openModal(item)}>
 						<DataTable.Cell>{item.title}</DataTable.Cell>
-						<DataTable.Cell>
-							{item.author.firstName + ' ' + item.author.lastName}
-						</DataTable.Cell>
+						<DataTable.Cell>{item.state.name}</DataTable.Cell>
 						<DataTable.Cell>{item.created}</DataTable.Cell>
 					</DataTable.Row>
 				))}
@@ -84,11 +63,16 @@ const MyApplicationsView: React.FC<Props> = ({ data }) => {
 					onDismiss={closeModal}
 					contentContainerStyle={styles.modalContainer}
 				>
-					{selectedRequest && (
+					test
+					{/* {selectedRequest && (
 						<Card style={styles.card}>
 							<Card.Title
 								title={selectedRequest.title}
-								subtitle={`Автор: ${selectedRequest.author.firstName}`}
+								subtitle={`Автор: ${
+									selectedRequest.author.firstName +
+									' ' +
+									selectedRequest.author.middleName
+								}`}
 							/>
 							<Card.Content>
 								<Text variant='bodyMedium'>
@@ -103,7 +87,7 @@ const MyApplicationsView: React.FC<Props> = ({ data }) => {
 								<Button onPress={closeModal}>Закрыть</Button>
 							</Card.Actions>
 						</Card>
-					)}
+					)} */}
 				</Modal>
 			</Portal>
 		</View>
@@ -126,7 +110,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		marginHorizontal: 'auto',
 		borderRadius: 10,
-		maxWidth: 300,
+		maxWidth: 600,
 		width: 'auto',
 	},
 	card: {
@@ -139,4 +123,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default MyApplicationsView
+export default UserRequestsView

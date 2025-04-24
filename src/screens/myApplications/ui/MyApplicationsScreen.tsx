@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { MyApplicationsConnector } from '../../../features/application/connector/MyApplicationsConnector'
+import { UserRequestsConnector } from '../../../features/application/connector/UserRequestsConnector'
 
 const MyApplicationsScreen: React.FC = () => {
 	return (
 		<View style={styles.container}>
-			<MyApplicationsConnector />
+			<UserRequestsConnector />
 		</View>
 	)
 }

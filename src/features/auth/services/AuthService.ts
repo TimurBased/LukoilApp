@@ -1,17 +1,17 @@
 import { $api } from '../../../shared/api/axios'
-import { AuthResponse } from '../types/AuthResponse'
+import { IAuthResponse } from '../types/AuthResponse'
 import { IUser } from '../../../entities/IUser'
 
 class AuthService {
-	async login(data: IUser) {
-		return await $api.post<AuthResponse, any, any>('/auth/login', {
+	static async login(data: IUser) {
+		return await $api.post<IAuthResponse, any, any>('/auth/login', {
 			login: data.login,
 			password: data.password,
 		})
 	}
 
-	async registration(data: IUser) {
-		return await $api.post<AuthResponse, any, IUser>('/auth/register', {
+	public static async registration(data: IUser) {
+		return await $api.post<IAuthResponse, any, IUser>('/auth/register', {
 			firstName: data.firstName,
 			middleName: data.middleName,
 			lastName: data.lastName,
@@ -21,9 +21,16 @@ class AuthService {
 		})
 	}
 
-	async logout(): Promise<void> {
+	static async logout() {
 		return await $api.post('/auth/logout')
+	}
+
+	static async refresh(refreshToken: string) {
+		const response = await $api.post<IAuthResponse>('/auth/refresh', {
+			refreshToken: refreshToken,
+		})
+		return response
 	}
 }
 
-export default new AuthService()
+export default AuthService

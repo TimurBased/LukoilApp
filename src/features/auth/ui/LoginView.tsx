@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, Snackbar } from 'react-native-paper'
 import { useFormik } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProp } from '../../../navigation/RootStackParams'
@@ -12,9 +12,18 @@ interface FormValues {
 
 interface Props {
 	submit: (values: FormValues) => Promise<Partial<FormValues> | null>
+	error: string | null
 }
 
-const LoginView: React.FC<Props> = ({ submit }) => {
+const LoginView: React.FC<Props> = ({ submit, error }) => {
+	const [snackbarVisible, setSnackbarVisible] = useState(false)
+
+	useEffect(() => {
+		if (error) {
+			setSnackbarVisible(true)
+		}
+	}, [error])
+
 	const navigation = useNavigation<NavigationProp>()
 	const formik = useFormik<FormValues>({
 		initialValues: {
@@ -69,6 +78,18 @@ const LoginView: React.FC<Props> = ({ submit }) => {
 					Зарегистрироваться
 				</Button>
 			</View>
+
+			<Snackbar
+				visible={snackbarVisible}
+				onDismiss={() => setSnackbarVisible(false)}
+				duration={3000}
+				action={{
+					label: 'Закрыть',
+					onPress: () => setSnackbarVisible(false),
+				}}
+			>
+				{error}
+			</Snackbar>
 		</View>
 	)
 }

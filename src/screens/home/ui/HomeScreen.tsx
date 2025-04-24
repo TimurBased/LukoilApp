@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import { Avatar, Button, Portal, Modal, Snackbar } from 'react-native-paper'
-import { ApplicationConnector } from '../../../features/application/connector/ApplicationConnector'
+import { MakeRequestConnector } from '../../../features/application/connector/MakeRequestConnector'
 import { useNavigation } from '@react-navigation/native'
 import { NavigationProp } from '../../../navigation/RootStackParams'
 
@@ -46,7 +46,7 @@ const HomeScreen: React.FC = () => {
 					onDismiss={() => setModalVisible(false)}
 					contentContainerStyle={styles.modalContainer}
 				>
-					<ApplicationConnector
+					<MakeRequestConnector
 						onSuccess={() => {
 							setModalVisible(false)
 							setSnackbarVisible(true)

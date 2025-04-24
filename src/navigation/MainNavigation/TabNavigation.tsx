@@ -9,16 +9,16 @@ const Tab = createBottomTabNavigator()
 const TabNavigation: React.FC = () => {
 	return (
 		<Tab.Navigator
-			initialRouteName='Главная'
+			initialRouteName='MainTab'
 			screenOptions={({ route }) => ({
 				tabBarIcon: ({ color, size }) => {
 					let iconName = 'help-circle-outline'
 
 					switch (route.name) {
-						case 'Главная':
+						case 'MainTab':
 							iconName = 'home'
 							break
-						case 'Профиль':
+						case 'ProfileTab':
 							iconName = 'account'
 							break
 					}
@@ -29,8 +29,8 @@ const TabNavigation: React.FC = () => {
 				tabBarInactiveTintColor: 'red',
 			})}
 		>
-			<Tab.Screen name='Главная' component={HomeScreen} />
-			<Tab.Screen name='Профиль' component={ProfileScreen} />
+			<Tab.Screen name='MainTab' component={HomeScreen} />
+			<Tab.Screen name='ProfileTab' component={ProfileScreen} />
 		</Tab.Navigator>
 	)
 }

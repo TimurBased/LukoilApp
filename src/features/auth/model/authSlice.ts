@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { login, register, logout } from './../model/thunks'
+import { login, register, logout, checkAuth } from './authThunks'
 
 export interface UserSchema {
 	token: string | null
@@ -24,7 +24,6 @@ const authSlice = createSlice({
 			.addCase(login.fulfilled, (state, action) => {
 				state.isLoading = false
 				state.isAuth = true
-				localStorage.setItem('accessToken', action.payload.accessToken)
 				state.token = action.payload.accessToken
 			})
 			.addCase(login.rejected, (state, action) => {
@@ -54,6 +53,19 @@ const authSlice = createSlice({
 				state.token = null
 			})
 			.addCase(logout.rejected, (state, action) => {
+				state.isLoading = false
+				state.error = action.payload as string
+			})
+			.addCase(checkAuth.pending, state => {
+				state.isLoading = true
+				state.error = null
+			})
+			.addCase(checkAuth.fulfilled, (state, action) => {
+				state.isLoading = false
+				state.isAuth = true
+				state.token = action.payload.accessToken
+			})
+			.addCase(checkAuth.rejected, (state, action) => {
 				state.isLoading = false
 				state.error = action.payload as string
 			})

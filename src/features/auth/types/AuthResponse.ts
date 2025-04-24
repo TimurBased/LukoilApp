@@ -1,6 +1,4 @@
-import { IUser } from '../../../entities/IUser'
-
-export interface AuthResponse {
+export interface IAuthResponse {
 	refreshToken: string
 	accessToken: string
 }

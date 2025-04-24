@@ -1,17 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import MyApplicationsView from '../ui/MyApplicationsView'
+import UserRequestsView from '../ui/UserRequestsView'
 import { fetchData } from '../../../shared/api/axios'
 import { ProgressBar, MD3Colors, Text } from 'react-native-paper'
+import { IRequest } from '../../../entities/IRequest'
 
-interface RequestProps {
-	id: string
-	name: string
-	author: string
-	created: string
-}
-
-export const MyApplicationsConnector: React.FC = () => {
-	const [data, setData] = useState<RequestProps[]>([])
+export const UserRequestsConnector: React.FC = () => {
+	const [data, setData] = useState<IRequest[]>([])
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 
@@ -36,7 +30,7 @@ export const MyApplicationsConnector: React.FC = () => {
 			{error && (
 				<Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text>
 			)}
-			{!loading && !error && <MyApplicationsView data={data} />}
+			{!loading && !error && <UserRequestsView data={data} />}
 		</>
 	)
 }

@@ -1,4 +1,6 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
+import { storage } from '../lib/storage/storage'
+import { IAuthResponse } from '../../features/auth/types/AuthResponse'
 
 export const $api = axios.create({
 	baseURL: 'http://192.168.0.56:8181',
@@ -10,20 +12,33 @@ export const $api = axios.create({
 	},
 })
 
-export const fetchData = async () => {
-	try {
-		const response = await $api.get('/requests')
-		return response.data
-	} catch (error) {
-		console.error('Ошибка при запросе:', error)
-	}
-}
+$api.interceptors.request.use(async config => {
+	const token = await storage.getItem('accessToken')
 
-$api.interceptors.request.use(config => {
-	const token = localStorage.getItem('accessToken')
-	//const token = config.headers.Authorization
-	if (token) {
-		config.headers.Authorization = `Bearer ${token}`
-	}
+	config.headers.Authorization = `Bearer ${token}`
+
 	return config
 })
+
+$api.interceptors.response.use(
+	config => {
+		return config
+	},
+
+	async error => {
+		const originalRequest = error.config
+		if (error.response.status == 401 && error.config && !error._isRetry) {
+			originalRequest._isRetry = true
+			try {
+				const response = await $api.get<IAuthResponse>('/auth/refresh', {
+					withCredentials: true,
+				})
+				await storage.setItem('accessToken', response.data.accessToken)
+				return $api.request(originalRequest)
+			} catch (e) {
+				console.log('Не авторизован')
+			}
+		}
+		throw error
+	}
+)

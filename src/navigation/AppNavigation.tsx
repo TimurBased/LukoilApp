@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import MyApplicationsScreen from '../screens/myApplications/ui/MyApplicationsScreen'
 import AuthNavigation from './AuthNavigation/AuthNavigation'
 import { useAppSelector } from '../hooks/useApp'
+import { ActivityIndicator } from 'react-native-paper'
 
 const RootStack = createStackNavigator()
 
@@ -16,7 +17,7 @@ const AppNavigation: React.FC = () => {
 				{isAuth ? (
 					<>
 						<RootStack.Screen
-							name='MainTabs'
+							name='Main'
 							options={{ headerShown: false }}
 							component={TabNavigation}
 						/>
